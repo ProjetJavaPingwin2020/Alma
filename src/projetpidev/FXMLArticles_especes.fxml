@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="listview" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="652.0" prefWidth="1045.0" style="-fx-background-color: 1B3A24;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projetpidev.FXMLArticles_especesController">
+    
+   <children>
+      <TableView fx:id="cc_article" layoutX="36.0" layoutY="194.0" prefHeight="286.0" prefWidth="564.0" stylesheets="@table.css">
+        <columns>
+          <TableColumn fx:id="cc_id" prefWidth="35.0" text="id" />
+          <TableColumn fx:id="cc_titre" prefWidth="58.0" text="titre" />
+            <TableColumn fx:id="cc_contenu" prefWidth="79.0" text="contenu" />
+            <TableColumn fx:id="cc_image" prefWidth="44.0" text="image" />
+            <TableColumn fx:id="cc_accept" prefWidth="64.0" text="accept" />
+            <TableColumn fx:id="cc_like" prefWidth="66.0" text="like" />
+            <TableColumn fx:id="cc_date" prefWidth="73.0" text="Date" />
+            <TableColumn fx:id="cc_commentaires" prefWidth="181.0" text="   Commentaire" />
+        </columns>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="10.0" right="30.0" />
+         </padding>
+         <effect>
+            <InnerShadow />
+         </effect>
+      </TableView>
+      <Label layoutX="657.0" layoutY="142.0" prefHeight="17.0" prefWidth="36.0" text="Titre" />
+      <Label layoutX="657.0" layoutY="215.0" text="Contenu" />
+      <TextField fx:id="titre_text" layoutX="724.0" layoutY="129.0" prefHeight="29.0" prefWidth="307.0" />
+      <TextField fx:id="contenu_text" layoutX="724.0" layoutY="175.0" prefHeight="113.0" prefWidth="307.0" />
+      <JFXButton fx:id="delete1" layoutX="298.0" layoutY="550.0" mnemonicParsing="false" onAction="#DeleteRowfromtable" prefHeight="32.0" prefWidth="157.0" style="-fx-background-color: #cc8d27; -fx-background-radius: 5em; -fx-border-radius: 5em;" text="Remove selected rows" textFill="WHITE" />
+      <Label fx:id="console" layoutX="14.0" layoutY="489.0" text="Console" />
+      <JFXButton fx:id="Eimage" buttonType="RAISED" layoutX="775.0" layoutY="379.0" onAction="#Uploadimage" prefHeight="32.0" prefWidth="125.0" style="-fx-background-color: #cc8d27; -fx-background-radius: 5em; -fx-border-radius: 5em;" text="UploadImage" textFill="#fcf8f1" />
+      <JFXButton fx:id="AddArticle" buttonType="RAISED" layoutX="775.0" layoutY="438.0" onAction="#AddArticle" prefHeight="32.0" prefWidth="125.0" ripplerFill="#77a168" style="-fx-background-color: #cc8d27; -fx-border-radius: 5em; -fx-background-radius: 5em;" text="AddArticle" textFill="#fffbf4" textOverrun="CLIP" />
+      <JFXButton fx:id="deletee" layoutX="775.0" layoutY="511.0" onAction="#DeleteArticle" prefHeight="32.0" prefWidth="125.0" style="-fx-background-color: #cc8d27; -fx-background-radius: 5em; -fx-border-radius: 5em;" text="DeleteArticle" textFill="#e8e5e0" />
+      <JFXButton fx:id="update" buttonType="RAISED" layoutX="775.0" layoutY="473.0" onAction="#UpdateArticle" prefHeight="32.0" prefWidth="125.0" style="-fx-background-color: #cc8d27; -fx-border-radius: 5em; -fx-background-radius: 5em;" text="UpdateArticle" textFill="#f2f2f2" />
+      <JFXButton fx:id="load" layoutX="298.0" layoutY="511.0" mnemonicParsing="false" onAction="#LoaddetailsAction" prefHeight="32.0" prefWidth="157.0" style="-fx-background-color: #cc8d27; -fx-background-radius: 5em; -fx-border-radius: 5em;" text="Load details" textFill="WHITE" />
+      <JFXTextField fx:id="filter" focusColor="#cc8d27" layoutX="119.0" layoutY="150.0" onAction="#searchArticle" prefHeight="25.0" prefWidth="328.0" />
+      <AnchorPane layoutX="-23.0" layoutY="-6.0" prefHeight="77.0" prefWidth="1069.0" style="-fx-background-color: #1B3A24;">
+         <children>
+            <ImageView fx:id="user" fitHeight="25.0" fitWidth="28.0" layoutX="51.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../images/user_24px.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="set" fitHeight="32.0" fitWidth="33.0" layoutX="487.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../images/huntset.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="stat" fitHeight="32.0" fitWidth="33.0" layoutX="925.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../images/statistics_64px.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="35.0" layoutY="45.0" prefHeight="17.0" prefWidth="58.0" text="    Alma" textAlignment="CENTER" textFill="#f2e0e0">
+               <font>
+                  <Font name="Book Antiqua Bold" size="13.0" />
+               </font>
+            </Label>
+            <JFXToggleButton layoutX="131.0" layoutY="1.0" prefHeight="67.0" prefWidth="172.0" text="Welcome Page" textFill="#f5efef" />
+            <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="84.0" layoutY="15.0">
+               <image>
+                  <Image url="@../../../../../images/logout.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+      <AnchorPane layoutX="-5.0" layoutY="594.0" prefHeight="58.0" prefWidth="1051.0" style="-fx-background-color: #1B3A24;">
+         <children>
+            <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="41.0" layoutY="19.0">
+               <image>
+                  <Image url="@../../../../../images/facebook.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="553.0" layoutY="19.0">
+               <image>
+                  <Image url="@../../../../../images/insta.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="925.0" layoutY="19.0">
+               <image>
+                  <Image url="@../../../../../images/twitter.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="39.0" fitWidth="46.0" layoutX="239.0" layoutY="14.0">
+               <image>
+                  <Image url="@../../../../../images/mail.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+      <Separator layoutX="654.0" layoutY="118.0" orientation="VERTICAL" prefHeight="354.0" prefWidth="4.0" />
+      <JFXSlider layoutX="193.0" layoutY="81.0" prefHeight="25.0" prefWidth="150.0" />
+      <Label layoutX="35.0" layoutY="85.0" prefHeight="17.0" prefWidth="115.0" text="ScreenBrightness" textAlignment="CENTER" textFill="#726666">
+         <font>
+            <Font name="Book Antiqua Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="35.0" layoutY="110.0" prefHeight="17.0" prefWidth="115.0" text="AutoBrightness" textAlignment="CENTER" textFill="#726666">
+         <font>
+            <Font name="Book Antiqua Bold" size="13.0" />
+         </font>
+      </Label>
+      <JFXCheckBox checkedColor="#cc8d27" layoutX="205.0" layoutY="109.0" prefHeight="18.0" prefWidth="140.0" />
+      <JFXCheckBox fx:id="type1" layoutX="733.0" layoutY="318.0" prefHeight="18.0" prefWidth="89.0" text="Chasse" />
+      <Label layoutX="665.0" layoutY="318.0" text="Ttype" />
+      <JFXCheckBox fx:id="type2" layoutX="732.0" layoutY="341.0" text="Peche" />
+      <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="724.0" layoutY="438.0">
+         <image>
+            <Image url="@../../../../../images/add.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="724.0" layoutY="473.0">
+         <image>
+            <Image url="@../../../../../images/update.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="724.0" layoutY="511.0">
+         <image>
+            <Image url="@../../../../../images/delete.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="32.0" fitWidth="33.0" layoutX="14.0" layoutY="146.0">
+         <image>
+            <Image url="@../../../../images/search.png" />
+         </image>
+      </ImageView>
+      <JFXTextArea fx:id="id_console" focusColor="#a88840" layoutX="9.0" layoutY="511.0" prefHeight="67.0" prefWidth="197.0" style="-fx-background-radius: 5em; -fx-border-radius: 5em;">
+         <unFocusColor>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop color="#246120" />
+                  <Stop color="WHITE" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </unFocusColor>
+      </JFXTextArea>
+      <ImageView fx:id="imageview" fitHeight="90.0" fitWidth="115.0" layoutX="916.0" layoutY="350.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="665.0" layoutY="387.0" text="Image" />
+      
+   </children>
+</AnchorPane>
