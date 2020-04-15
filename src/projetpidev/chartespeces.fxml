@@ -3,21 +3,19 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXSlider?>
-<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="583.0" prefWidth="1013.0" style="-fx-background-color: 1B3A24;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projetpidev.WelcomeArticleController">
+<AnchorPane fx:id="listview" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="652.0" prefWidth="1045.0" style="-fx-background-color: 1B3A24;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projetpidev.FXMLArticles_especesController">
+    
    <children>
-      <Label fx:id="console" layoutX="35.0" layoutY="402.0" text="Console" />
-      <JFXButton fx:id="item" buttonType="RAISED" layoutX="382.0" layoutY="187.0" onAction="#ItemsManagement" prefHeight="77.0" prefWidth="198.0" style="-fx-background-color: #cc8d27; -fx-border-radius: 5em; -fx-background-radius: 5em;" text="Managment tItems" textFill="#f2f2f2" />
-      <AnchorPane layoutX="-23.0" layoutY="-6.0" prefHeight="67.0" prefWidth="1038.0" style="-fx-background-color: #1B3A24;">
+
+      <AnchorPane layoutX="-23.0" layoutY="-6.0" prefHeight="77.0" prefWidth="1069.0" style="-fx-background-color: #1B3A24;">
          <children>
             <ImageView fx:id="user" fitHeight="25.0" fitWidth="28.0" layoutX="51.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -39,17 +37,21 @@
                   <Font name="Book Antiqua Bold" size="13.0" />
                </font>
             </Label>
-            <JFXToggleButton layoutX="108.0" layoutY="10.0" prefHeight="67.0" prefWidth="172.0" text="Welcome Page" textFill="#f5efef" />
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutY="525.0" prefHeight="58.0" prefWidth="1013.0" style="-fx-background-color: #1B3A24;">
+            <JFXToggleButton layoutX="131.0" layoutY="1.0" prefHeight="67.0" prefWidth="172.0" text="Welcome Page" textFill="#f5efef" />
+            <ImageView fitHeight="29.0" fitWidth="26.0" layoutX="84.0" layoutY="15.0">
+               <image>
+                  <Image url="@../../../../../images/logout.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+      <AnchorPane layoutX="-5.0" layoutY="594.0" prefHeight="58.0" prefWidth="1051.0" style="-fx-background-color: #1B3A24;">
          <children>
             <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="41.0" layoutY="19.0">
                <image>
                   <Image url="@../../../../../images/facebook.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="463.0" layoutY="19.0">
+            <ImageView fitHeight="32.0" fitWidth="36.0" layoutX="553.0" layoutY="19.0">
                <image>
                   <Image url="@../../../../../images/insta.png" />
                </image>
@@ -59,8 +61,13 @@
                   <Image url="@../../../../../images/twitter.png" />
                </image>
             </ImageView>
-         </children>
-      </AnchorPane>
+            <ImageView fitHeight="39.0" fitWidth="46.0" layoutX="239.0" layoutY="14.0">
+               <image>
+                  <Image url="@../../../../../images/mail.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+      <Separator layoutX="693.0" layoutY="148.0" orientation="VERTICAL" prefHeight="354.0" prefWidth="4.0" />
       <JFXSlider layoutX="193.0" layoutY="81.0" prefHeight="25.0" prefWidth="150.0" />
       <Label layoutX="35.0" layoutY="85.0" prefHeight="17.0" prefWidth="115.0" text="ScreenBrightness" textAlignment="CENTER" textFill="#726666">
          <font>
@@ -73,16 +80,19 @@
          </font>
       </Label>
       <JFXCheckBox checkedColor="#cc8d27" layoutX="205.0" layoutY="109.0" prefHeight="18.0" prefWidth="140.0" />
-      <JFXTextArea fx:id="id_console" focusColor="#a88840" layoutX="20.0" layoutY="430.0" prefHeight="77.0" prefWidth="265.0" style="-fx-background-radius: 5em; -fx-border-radius: 5em;">
-         <unFocusColor>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop color="#246120" />
-                  <Stop color="WHITE" offset="1.0" />
-               </stops>
-            </LinearGradient>
-         </unFocusColor>
-      </JFXTextArea>
-      <JFXButton fx:id="update1" buttonType="RAISED" layoutX="382.0" layoutY="342.0" prefHeight="77.0" prefWidth="198.0" style="-fx-background-color: #cc8d27; -fx-border-radius: 5em; -fx-background-radius: 5em;" text="Managment Comments" textFill="#f2f2f2" />
+      <ImageView fitHeight="32.0" fitWidth="33.0" layoutX="14.0" layoutY="146.0">
+         <image>
+            <Image url="@../../../../images/search.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imageview" fitHeight="90.0" fitWidth="115.0" layoutX="916.0" layoutY="350.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="count" layoutX="485.0" layoutY="527.0" prefHeight="17.0" prefWidth="157.0" />
+      <Label fx:id="fileselected" layoutX="904.0" layoutY="498.0" prefHeight="17.0" prefWidth="140.0" textFill="#e70f0f" />
+      <Label fx:id="labeltitre" layoutX="720.0" layoutY="102.0" prefHeight="17.0" prefWidth="307.0" textFill="#e70f0f" />
+      <Label fx:id="labelcontenu" layoutX="724.0" layoutY="287.0" prefHeight="17.0" prefWidth="307.0" textFill="#e70f0f" />
+      <Label fx:id="labelimage" layoutX="720.0" layoutY="411.0" prefHeight="17.0" prefWidth="307.0" textFill="#e70f0f" />
+      <Label fx:id="labeltype" layoutX="711.0" layoutY="359.0" prefHeight="17.0" prefWidth="307.0" textFill="#e70f0f" />
+      <JFXButton fx:id="chart" layoutX="433.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#chart" prefHeight="32.0" prefWidth="157.0" style="-fx-background-color: #cc8d27; -fx-background-radius: 5em; -fx-border-radius: 5em;" text="View chart" textFill="WHITE" />
+      
    </children>
 </AnchorPane>

@@ -6,29 +6,81 @@
 package Entity;
 
 import java.sql.Date;
+import javafx.collections.ObservableList;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author USER
  */
+
+
 public class Commentaires {
    
+@Id
 private int id;
 private int user;
-private int article;
 private Date date_pub;
 private String Contenu;
+private int article;
+   private String sto;
+   Articles_especes s;
+    public Articles_especes getS() {
+        return s;
+    }
+
+    public void setS(Articles_especes s) {
+        this.s = s;
+    }
+
+    public String getSto() {
+        return sto;
+    }
+
+    public void setSto(String sto) {
+        this.sto = sto;
+    }
+
+  
 
     public Commentaires() {
     }
 
-    public Commentaires(int id, int user, int article, Date date_pub, String Contenu) {
+
+  
+
+    public Commentaires(int id, int user,int article, Date date_pub, String Contenu) {
         this.id = id;
         this.user = user;
-        this.article = article;
         this.date_pub = date_pub;
         this.Contenu = Contenu;
+        this.article=article;
     }
+
+    public Commentaires(int article,String Contenu) {
+       this.Contenu = Contenu;
+        this.article=article;
+       
+    }
+      public Commentaires(String Contenu, Articles_especes s) {
+       this.Contenu = Contenu;
+        this.s=s;
+    }
+
+    public int getArticle() {
+        return article;
+    }
+
+    public void setArticle(int article) {
+        this.article = article;
+    }
+
+ 
+    
 
     public int getId() {
         return id;
@@ -46,13 +98,8 @@ private String Contenu;
         this.user = user;
     }
 
-    public int getArticle() {
-        return article;
-    }
-
-    public void setArticle(int article) {
-        this.article = article;
-    }
+  
+  
 
     public Date getDate_pub() {
         return date_pub;

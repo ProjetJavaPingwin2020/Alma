@@ -35,20 +35,10 @@ import javax.swing.JOptionPane;
  */
 public class FXMLLoginController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
-    @FXML
-    private JFXTextField password;
 
     @FXML
     private Button login;
     
-    @FXML
-    private ImageView image ;
-   
-    @FXML
-    private JFXTextField username;
 
     @FXML
     private Button register;
@@ -60,8 +50,8 @@ public class FXMLLoginController implements Initializable {
     void login(ActionEvent event) throws SQLException, IOException {
         
    
-       Parent article = FXMLLoader.load(getClass().getResource("welcomeArticle.fxml"));
-      Scene article_scene=new Scene(article);
+      Parent articlee = FXMLLoader.load(getClass().getResource("/projetpidev/FXMLArticles_especes.fxml"));
+      Scene article_scene=new Scene(articlee);
       
       Stage app_stage =(Stage)((Node)event.getSource()).getScene().getWindow();
       app_stage.hide();
@@ -70,6 +60,7 @@ public class FXMLLoginController implements Initializable {
     } 
      
     
+    @FXML
     public void redirect(ActionEvent event)
     {
          try {

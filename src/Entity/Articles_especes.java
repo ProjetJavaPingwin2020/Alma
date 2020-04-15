@@ -4,13 +4,23 @@
  * and open the template in the editor.
  */
 package Entity;
+import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.sql.SQLException;
+import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -18,18 +28,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import utils.ConnexionBase;
 
-/**
- *
- * @author USER
- */
-public class Articles_especes {
+public class Articles_especes  {
     
+  
+    @Id
+    @GeneratedValue
 
     private int id;
     private String Titre;
     private String Contenu;
      private String Type;
-   
+
+    @ManyToMany
+    Set<Commentaires> com;
+ 
 
     private Date datepub;
     private int numlike;
@@ -44,12 +56,19 @@ public class Articles_especes {
   
         
     //enty ki taaml ajout eda5el id ?wela autoincrement ! le auto 
-    public Articles_especes( String Titre, String Contenu,String image) {//
+    public Articles_especes(String Type,String Titre, String Contenu,String image) {//
        
         this.Titre = Titre;
         this.Contenu = Contenu;
         this.image = image;
+         this.Type = Type;
+        
+         /*this.com=(Set<Commentaires>) com;*/
       
+    }
+
+    public Articles_especes(String Type, String TitreE, String Contenu, String img, String commentaire) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getType() {
@@ -58,6 +77,11 @@ public class Articles_especes {
 
     public void setType(String Type) {
         this.Type = Type;
+    }
+
+    @Override
+    public String toString() {
+        return "Articles_especes{" + "commentaires=" + com + ", id=" + id + ", Titre=" + Titre + ", Contenu=" + Contenu + ", Type=" + Type + ", datepub=" + datepub + ", numlike=" + numlike + ", accept=" + accept + ", image=" + image + ", photo=" + photo + '}';
     }
        
         
@@ -176,7 +200,7 @@ prt.executeUpdate();
 
    }
 
-//ye hou heka nestha9lou l code fam ye almaa lezmk tbadalou blastouuuu mayjich lenna thotou kolll f service w juste baed tbedel f imhpeort matefsdch 5edmtk behy mela bara chouf trah
+
  /* public static ObservableList<Articles_especes> getAllRecords() throws SQLException {
       Connection cnx = ConnexionBase.getInstance().getCnx();
       try{
@@ -210,6 +234,22 @@ while(rs.next()){
       }
         return null;
       }*/
+
+   
+
+    public Set<Commentaires> getCom() {
+        return com;
+    }
+
+    public void setCom(Set<Commentaires> com) {
+        this.com= com;
+    }
+
+    public Date getDatepub(Date date) {
+      return datepub;
+    }
+
+ 
    
    
 }

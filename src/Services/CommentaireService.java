@@ -33,19 +33,35 @@ public class CommentaireService {
     public CommentaireService() {
         cnx = ConnexionBase.getInstance().getCnx();
     }
+public ObservableList<Commentaires> afficher(Commentaires A) throws SQLException {
 
+        ObservableList<Commentaires> arr = FXCollections.observableArrayList();
+         
+        st = cnx.createStatement();//sahytk hahaha
+        ResultSet rs = st.executeQuery("select * from Commentaire ");
+
+        while (rs.next()) {
+    
+            arr.add(new Commentaires(rs.getInt("article"),rs.getString("contenu")));
+
+        }
+         
+              
+        return arr;
+
+    }
   
    public ObservableList<Commentaires> CommentaireLoad()
    {
    ObservableList<Commentaires> myListC = FXCollections.observableArrayList();
         try {
-            String req = "SELECT * FROM Commentaires";
+            String req = "SELECT * FROM Commentaire";
             Statement pst = cnx.createStatement();
             ResultSet rs = pst.executeQuery(req);
             while (rs.next()) {
                 Commentaires C = new Commentaires();
                 C.setContenu(rs.getString("Contenu"));
-                C.setDate_pub(rs.getDate("Date_pub"));
+                C.setArticle(rs.getInt("article"));
                 myListC.add(C);
             }
 
@@ -61,16 +77,23 @@ public class CommentaireService {
     
         try {
 
-            String requete = "INSERT INTO `Commentaires` (`Contenu`) VALUES (?)";
-            PreparedStatement st = cnx.prepareStatement(requete);
-            st.setString(1, C.getContenu());
+            String requete = "INSERT INTO `Commentaire` (`article`,`Contenu`) VALUES (?,?)";//h
+           //thi hiya l cle etranger maw
+
+           //lezm thothom mnadhmin kima el base alma el article iji 9abl choftou ena 
+           PreparedStatement st = cnx.prepareStatement(requete);
+          st.setInt(1, C.getArticle());
+            st.setString(2, C.getContenu());
+           
             st.executeUpdate();
             System.out.println("Commentaire ajoutée");
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
 
-        }
+        }//mch logique ema njarabha hhh bebe mo5i t3eeb
+     
+                //ena mafhemtch chniya el mochekla mte3ouhhhhh aamel ithrab 
 
-    }
+    
 }
-
+}

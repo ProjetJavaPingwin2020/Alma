@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTimePicker;
+import com.teknikindustries.bulksms.SMS;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,61 +53,119 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.swing.JOptionPane;
 import static jdk.nashorn.internal.runtime.Debug.id;
 import utils.ConnexionBase;
-
+import com.teknikindustries.bulksms.SMS;
+import java.awt.event.MouseEvent;
+import javafx.scene.layout.Pane;
   
-   
-public class WelcomeArticleController implements Initializable {
-     @FXML
-    private AnchorPane rootPane;
-
-
-    @FXML
-    private Label console;
-
-    @FXML
-    private JFXButton item;
-
-    @FXML
-    private AnchorPane Pane1;
-
-    @FXML
-    private ImageView user;
-
-    @FXML
-    private ImageView set;
-
-    @FXML
-    private ImageView stat;
-
-    @FXML
-    private JFXTextArea id_console;
-
-    @FXML
-    private JFXButton update1;
+ 
+  
 
    
+public class SMSCONTROLLER implements Initializable {
+      @FXML
+    private AnchorPane listview;
 
+    @FXML
+    private TextField text_obj;
 
+    @FXML
+    private TextField text_msg;
+
+    @FXML
+    private JFXButton sms;
+
+    @FXML
+    private Label fileselected;
+
+    @FXML
+    private Label labeltitre;
+
+    @FXML
+    private Label labelcontenu;
+
+    @FXML
+    private Label labelimage;
+
+    @FXML
+    private Label object;
+
+    @FXML
+    private Label messsage;
+
+    @FXML
+    private Label Lhello;
+
+    @FXML
+    private Pane pane11;
+
+    @FXML
+    private Pane pane2;
+
+    @FXML
+    private Pane pane3;
+
+    @FXML
+    private Pane pane4;
+
+    @FXML
+    private ImageView logout;
+
+    @FXML
+    private ImageView panier;
+
+    @FXML
+    private Button EspecesBtn;
+
+    @FXML
+    private Button EvenementsBtn;
+
+    @FXML
+    private Button InformationsBtn;
+
+    @FXML
+    private Button BoutiqueBtn;
+
+    @FXML
+    private Button FormationsBtn;
+    @FXML
+    private JFXButton print1;
+
+    
+    @FXML
+       public void sendsms(ActionEvent event) {
+
+ 
+    SMS Tut=new SMS();
+    Tut.SendSMS("alma_09","alma123ahmed",text_msg.getText(),text_obj.getText(),"https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
+    JOptionPane.showMessageDialog(null, "sms sent");
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
   
-     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+
+    @FXML
+    void redirectionFormation(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void logout(javafx.scene.input.MouseEvent event) {
+    }
+
+    @FXML
+    private void back(ActionEvent event) throws IOException {
         
-    }
-     @FXML
-    void CommentsManagement(ActionEvent event) {
-
-    }
-   @FXML
- void ItemsManagement(ActionEvent event) throws IOException{
-     
-      Parent article = FXMLLoader.load(getClass().getResource("FXMLArticles_especes.fxml"));
-      Scene article_scene=new Scene(article);
-      
+      Parent send = FXMLLoader.load(getClass().getResource("Commentaireinterf.fxml"));
+      Scene article_scene=new Scene(send);
       Stage app_stage =(Stage)((Node)event.getSource()).getScene().getWindow();
       app_stage.hide();
       app_stage.setScene(article_scene);
       app_stage.show();
-    } 
+    }
 }

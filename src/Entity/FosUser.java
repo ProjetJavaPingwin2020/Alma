@@ -6,13 +6,26 @@
 package Entity;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author Yass
  */
+@Entity @Table(name = "fos_user")
 public class FosUser {
     
+    @OneToMany( targetEntity=Articles_especes.class, mappedBy="user" )
+    
+    private List<Articles_especes> Articles_especes = new ArrayList<>();
+    @Id  @GeneratedValue( strategy=GenerationType.IDENTITY )
     private int id;
     private String username;
       private String username_canonical;

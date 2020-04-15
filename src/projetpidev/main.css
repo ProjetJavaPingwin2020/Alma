@@ -1,0 +1,74 @@
+.button{
+    -fx-background-color : #a8ae21;
+    -fx-background-radius : 22;
+    -fx-text-fill: white;
+        
+}
+.login .content{
+    -fx-cursor: DEFAULT ;
+}
+
+.button:hover
+{
+-fx-background-color : white ;
+-fx-background-radius :  22;
+-fx-text-fill: #a8ae21;
+-fx-border-color: #a8ae21;
+-fx-border-radius: 20;
+-fx-border-width: 3;
+}
+
+.button:pressed
+{
+ -fx-background-color : white ;
+-fx-background-radius :  22;
+-fx-text-fill: #a8ae21;
+-fx-border-color: #a8ae21;
+-fx-border-radius: 20;
+-fx-border-width: 3;
+ -fx-rotate: 10;
+}
+.table-view, .tree-table-view {
+    /* Constants used throughout the tableview. */
+    -fx-table-header-border-color: transparent;
+    -fx-table-cell-border-color: -fx-box-border; /* Horizontal Lines*/
+    -fx-background-color: transparent;
+}
+
+/* The column header row is made up of a number of column-header, one for each
+   TableColumn, and a 'filler' area that extends from the right-most column
+   to the edge of the tableview, or up to the 'column control' button. */
+.table-view .filler, .tree-table-view .filler, .table-view .column-header,
+.tree-table-view .column-header {
+    -fx-size: 65;
+    -fx-border-style: null;
+    -fx-border-color: -swatch-grey;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-color: transparent;
+}
+
+.table-view .show-hide-columns-button, .tree-table-view .show-hide-columns-button
+{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label, .table-view .filler .label,
+.table-view .column-drag-header .label, .tree-table-view .column-header .label,
+.tree-table-view .filler .label, .tree-table-view .column-drag-header .label
+{
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-view .column-header-background, .tree-table-view .column-header-background
+{
+    -fx-background-color: transparent;
+}
+
+.table-row-cell, .tree-table-row-cell {
+    -fx-cell-size: 40px;
+}
+
+.table-cell {
+    -fx-border-color: transparent; /* Vertical Lines*/
+    -fx-border-width: 1;
+}
