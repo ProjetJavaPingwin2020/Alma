@@ -7,6 +7,8 @@ package Services;
 
 import Entity.Articles_especes;
 import Entity.Commentaires;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +17,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.swing.JOptionPane;
@@ -96,4 +100,5 @@ public ObservableList<Commentaires> afficher(Commentaires A) throws SQLException
 
     
 }
+  
 }

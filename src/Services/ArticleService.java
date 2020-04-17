@@ -7,6 +7,7 @@ package Services;
 
 import Entity.Articles_especes;
 import Entity.Commentaires;
+import Entity.FosUser;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,7 +50,7 @@ public class ArticleService {
        
    ObservableList<Articles_especes> artList = FXCollections.observableArrayList();
         try {
-            String req = "SELECT * FROM articles_especes";
+            String req = "SELECT * from articles_especes";
             Statement pst = cnx.createStatement();
             ResultSet rs = pst.executeQuery(req);
             while (rs.next()) {
@@ -57,7 +58,8 @@ public class ArticleService {
                 A.setType(rs.getString("Type"));
                 A.setTitre(rs.getString("titre"));
                 A.setContenu(rs.getString("Contenu"));
-               /* A.getDatepub(rs.getDate("datepub"));*/
+               // A.setUser(rs.getString("user"));
+               A.setDatepub(rs.getDate("datepub"));
                 A.setImage(rs.getString("image"));
             
              ImageView v=new ImageView();

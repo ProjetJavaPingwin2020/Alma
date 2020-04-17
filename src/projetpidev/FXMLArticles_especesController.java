@@ -93,6 +93,7 @@ import static javafx.scene.input.KeyCode.T;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -125,16 +126,16 @@ public class FXMLArticles_especesController implements Initializable {
     private TableColumn<Articles_especes,String> cc_accept;
     @FXML
     private TableColumn<Articles_especes,String> cc_image;
-        @FXML
+    @FXML
     private TableColumn<Articles_especes,Date> DATE_cc;
-   
+     
+    @FXML
+    private TableColumn<Articles_especes,String>user;
     private PreparedStatement prt=null;
     private FileInputStream A;
     ObservableList<Articles_especes> oo,oblist=FXCollections.observableArrayList();
    
       FilteredList<Articles_especes> filteredData = new FilteredList<>(oblist, b -> true);
-      @FXML
-    private JFXButton print;
     String img="";
    Collection<Commentaires> com=null; //lahdha 
     String Titre = "";
@@ -150,21 +151,7 @@ public class FXMLArticles_especesController implements Initializable {
     @FXML
     private TextField contenu_text;
 
-    @FXML
-    private JFXButton delete1;
-
-    @FXML
-    private JFXButton Eimage;
-
-    @FXML
-    private JFXButton AddArticle;
-
-    @FXML
-    private JFXButton deletee;
-
-    @FXML
-    private JFXButton update;
-
+ResultSet rs;
     @FXML
     private JFXTextField filter;
 
@@ -183,11 +170,6 @@ public class FXMLArticles_especesController implements Initializable {
     @FXML
     private Label labck1;
 
-    @FXML
-    private Label count;
-
-    @FXML
-    private Label fileselected;
 
     @FXML
     private Label labeltitre;
@@ -201,14 +183,6 @@ public class FXMLArticles_especesController implements Initializable {
     @FXML
     private Label labeltype;
 
-    @FXML
-    private JFXButton load1;
-
-    @FXML
-    private JFXButton selected;
-
-    @FXML
-    private Label Lhello;
 
     @FXML
     private Pane pane11;
@@ -221,44 +195,64 @@ public class FXMLArticles_especesController implements Initializable {
 
     @FXML
     private Pane pane4;
+    private JFXTextField front_art;
 
+    @FXML
+    private Label labtit;
+
+    private Circle btnClose;
+
+
+    @FXML
+    private AnchorPane listview;
+    @FXML
+    private Label Lhello;
     @FXML
     private ImageView logout;
-
     @FXML
     private ImageView panier;
-
     @FXML
     private Button EspecesBtn;
-
     @FXML
     private Button EvenementsBtn;
-
     @FXML
     private Button InformationsBtn;
-
     @FXML
     private Button BoutiqueBtn;
-
     @FXML
     private Button FormationsBtn;
     @FXML
-    private AnchorPane listview;
- 
-    @FXML
     private JFXButton load;
     @FXML
-    private Button mesres;
-    private JFXTextField front_art;
+    private JFXButton print;
     @FXML
-    private Label labtit;
+    private Button mesres;
+    @FXML
+    private JFXButton delete1;
+    @FXML
+    private JFXButton Eimage;
+    @FXML
+    private JFXButton AddArticle;
+    @FXML
+    private JFXButton deletee;
+    @FXML
+    private JFXButton update;
+    @FXML
+    private Label count;
+    @FXML
+    private Label fileselected;
+    @FXML
+    private JFXButton load1;
+    @FXML
+    private JFXButton selected;
+
   
   
 
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        pane11.setStyle("-fx-background-image: url(\"/images/4444.jpg\")");
+       pane11.setStyle("-fx-background-image: url(\"/images/4444.jpg\")");
         pane2.setStyle("-fx-background-image: url(\"/images/2222.jpg\")");
         pane3.setStyle("-fx-background-image: url(\"/images/3333.jpg\")");
         pane4.setStyle("-fx-background-image: url(\"/images/4444.jpg\")");
@@ -266,11 +260,29 @@ public class FXMLArticles_especesController implements Initializable {
          type =new ArrayList();
         type.add("*.jpg");
          type.add("*.png");
-
-         /*LoaddetailsAction();*/
+         
+      /*  try {
+          
+        Connection  cnx = ConnexionBase.getInstance().getCnx();
+         String req = "SELECT * FROM articles_especes";
+            Statement pst = cnx.createStatement();
+          rs = pst.executeQuery(req);
+        } catch (SQLException ex) {
+            Logger.getLogger(FXMLArticles_especesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            afficherListe();
+            
+            
+            
+            
+            LoaddetailsAction();
+        } catch (SQLException ex) {
+            Logger.getLogger(FXMLArticles_especesController.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }
-     @FXML
-    void print(ActionEvent event) throws FileNotFoundException, DocumentException {
+    @FXML
+     void print(ActionEvent event) throws FileNotFoundException, DocumentException {
 
         
            String file_name="C:\\wamp64\\www\\pdfd\\Articles.pdf";  
@@ -295,8 +307,10 @@ public class FXMLArticles_especesController implements Initializable {
             p.add("Hunkingdom");
             p.setAlignment(Element.ALIGN_CENTER);
             document.add(p);
+//            document.add(Image.getInstance("C:\\wamp64\\www\\hunt.JPG"));
             Paragraph p2 = new Paragraph();
             p2.add("ARTICLES_ESPECES"); //no alignment
+           //no alignment
             document.add(p2);
             Font f = new Font();
             f.setStyle(Font.BOLD);
@@ -309,16 +323,15 @@ document.add(para);
        System.out.println(e);
 }
 }
-    
-       @FXML
-  void Calculate(ActionEvent event) throws SQLException {
+    @FXML
+   public  void Calculate(ActionEvent event) throws SQLException {
     
         int a=cc_article.getItems().size();
         JOptionPane.showMessageDialog(null, "nombre rows" +a);
 }
 
-        @FXML
-    void Ajoutercommentaire(ActionEvent event) throws IOException {
+    @FXML
+        void Ajoutercommentaire(ActionEvent event) throws IOException {
 
       Parent send = FXMLLoader.load(getClass().getResource("Commentaireinterf.fxml"));
       Scene article_scene=new Scene(send);
@@ -338,8 +351,8 @@ document.add(para);
       app_stage.show();
       
     }*/
-       @FXML
-     void LoaddetailsAction(ActionEvent event) {//hethi l affich
+    @FXML
+       void LoaddetailsAction(ActionEvent event) {//hethi l affich
         ArticleService sp = new ArticleService();
         List articles=sp.ArticleLoad();
         ObservableList et=FXCollections.observableArrayList(articles);
@@ -355,12 +368,13 @@ document.add(para);
       
              cc_image.setCellValueFactory(new PropertyValueFactory<>("photo"));
              DATE_cc.setCellValueFactory(new PropertyValueFactory<>("datepub"));
+             //user.setCellValueFactory(new PropertyValueFactory<>("user"));
              cc_titre.setCellFactory(TextFieldTableCell.forTableColumn());
              cc_contenu.setCellFactory(TextFieldTableCell.forTableColumn());
          
     }  
-        @FXML
-      void checkType(ActionEvent event){
+    @FXML
+    public void checkType(ActionEvent event){
           
         int co=0;
         String msg="";
@@ -451,9 +465,9 @@ document.add(para);
   
     
 cc_article.setEditable(true);
-}*/
-   @FXML
-    void AddArticle(ActionEvent event) throws FileNotFoundException, IOException{
+}*/ 
+    @FXML
+         public void AddArticle(ActionEvent event) throws FileNotFoundException, IOException{
       /* labtit.setText("");
        labelcontenu.setText("");
        labelimage.setText("");
@@ -494,7 +508,7 @@ cc_article.setEditable(true);
       
          
          if (labck1.getText().isEmpty()) {
-          labeltype.setText("Vous devez entrer un type"); // hedhi habtch tatl fhmtch pk 
+          labeltype.setText("Vous devez entrer un type"); 
             new Alert(Alert.AlertType.ERROR, " Vous devez choisir un type de hunt").show();
         }
         
@@ -514,13 +528,13 @@ cc_article.setEditable(true);
          }}
   
     @FXML
-        void changeTitreCellEvent(CellEditEvent edittedCell)
+    public void changeTitreCellEvent(CellEditEvent edittedCell)
     {
         Articles_especes art =  cc_article.getSelectionModel().getSelectedItem();
        art.setTitre(edittedCell.getNewValue().toString());
     }
     @FXML
-        void changeContenuCellEvent(CellEditEvent edittedCell)
+   public void changeContenuCellEvent(CellEditEvent edittedCell)
     {
         Articles_especes art =  cc_article.getSelectionModel().getSelectedItem();
        art.setContenu(edittedCell.getNewValue().toString());
@@ -562,8 +576,36 @@ cc_article.setEditable(true);
                       
    });
         ntf.showConfirm();*/
-      @FXML
-    void handleDeletePerson(ActionEvent event) {
+    private void handleMouseEvenet(MouseEvent event){
+        if (event.getSource() == btnClose){
+            System.exit(0);
+        }
+    }
+   /* 
+  public void afficherListe() throws SQLException{
+        rs.first();
+        title.setText(rs.getString("title"));
+         text.setText(rs.getString("content"));
+           rs.next();
+title1.setText(rs.getString("title"));
+         text1.setText(rs.getString("content"));
+        
+    }
+    
+    @FXML
+     public void afficherListe1() throws SQLException{
+        rs.next();
+        title.setText(rs.getString("title"));
+         text.setText(rs.getString("content"));
+       rs.next();
+title1.setText(rs.getString("title"));
+         text1.setText(rs.getString("content"));
+        
+     }*/
+
+
+    @FXML
+  public  void handleDeletePerson(ActionEvent event) {
     int selectedIndex = cc_article.getSelectionModel().getSelectedIndex();
     if (selectedIndex >2) {
         cc_article.getItems().remove(selectedIndex);
@@ -579,11 +621,11 @@ cc_article.setEditable(true);
     }
 } 
     @FXML
-  void DeleteRowfromtable(ActionEvent event) {
+  public  void DeleteRowfromtable(ActionEvent event) {
  cc_article.getItems().removeAll(cc_article.getSelectionModel().getSelectedItem());
     }
-     @FXML
-      void UpdateArticle(ActionEvent event) throws SQLException {
+    @FXML
+  public  void UpdateArticle(ActionEvent event) throws SQLException {
         
         try { 
 Articles_especes.updateArticle(text_title.getText(),contenu_text.getText());
@@ -593,7 +635,7 @@ Articles_especes.updateArticle(text_title.getText(),contenu_text.getText());
      throw e;
  }} 
     @FXML
-    void searchArticle(ActionEvent event) {
+    public void searchArticle(ActionEvent event) {
            ObservableList data =  cc_article.getItems();
             filter.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (oldValue != null && (newValue.length() < oldValue.length())) {
@@ -616,7 +658,7 @@ Articles_especes.updateArticle(text_title.getText(),contenu_text.getText());
         });}
      
     @FXML
-    void DeleteArticle(ActionEvent Event) throws SQLException{
+    public void DeleteArticle(ActionEvent Event) throws SQLException{
       try { 
 Articles_especes.DeleteArticleBytitre(String.valueOf(text_title.getText()));
      JOptionPane.showMessageDialog(null, "Delete avec succes");
@@ -626,7 +668,7 @@ Articles_especes.DeleteArticleBytitre(String.valueOf(text_title.getText()));
  }}
          
     @FXML
-         void Uploadimage(ActionEvent event) throws IOException {
+   public void Uploadimage(ActionEvent event) throws IOException {
      
         FileChooser f=new FileChooser();
         f.getExtensionFilters().add(new FileChooser.ExtensionFilter("jpeg,png",type));
@@ -750,12 +792,13 @@ public void choisirImage(ActionEvent event) {
     }
 */
     @FXML
-  void logout(javafx.scene.input.MouseEvent event) {
+    void logout(javafx.scene.input.MouseEvent event) {
     }
 
     @FXML
     void redirectionFormation(ActionEvent event) {
     }
+
 
  
 

@@ -49,7 +49,7 @@ public class FXMLLoginController implements Initializable {
     @FXML
     void login(ActionEvent event) throws SQLException, IOException {
         
-   
+   //ena hatit l interface heki baed l login direct bich ntesti
       Parent articlee = FXMLLoader.load(getClass().getResource("/projetpidev/FXMLArticles_especes.fxml"));
       Scene article_scene=new Scene(articlee);
       

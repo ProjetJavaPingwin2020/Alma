@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Entity;
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -38,18 +39,34 @@ public class Articles_especes  {
     private String Titre;
     private String Contenu;
      private String Type;
-
+ private String User;
     @ManyToMany
     Set<Commentaires> com;
  
 
     private Date datepub;
+
+    public String getUser() {
+        return User;
+    }
+
+    public void setUser(String User) {
+        this.User = User;
+    }
     private int numlike;
     private int accept;
     private String image;
      private ImageView photo;
 
+private int Userid;
 
+    public int getUserid() {
+        return Userid;
+    }
+
+    public void setUserid(int Userid) {
+        this.Userid = Userid;
+    }
     public Articles_especes() {
     }
 

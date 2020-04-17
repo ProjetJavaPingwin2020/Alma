@@ -12,6 +12,12 @@ import Entity.Commentaires;
 import Services.ArticleService;
 import Services.CommentaireService;
 import Services.ServiceCommentaireEvenement;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDialog;
@@ -20,16 +26,19 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 import com.jfoenix.controls.events.JFXDialogEvent;
-
+import com.jfoenix.effects.JFXDepthManager;
+import com.mysql.fabric.xmlrpc.base.Data;
 import com.teknikindustries.bulksms.SMS;
 import java.awt.Desktop;
-import java.awt.event.MouseEvent;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import static java.lang.Integer.sum;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -50,26 +59,36 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.FadeTransition;
+import javafx.application.HostServices;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.geometry.Insets;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -81,8 +100,14 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import static javafx.scene.input.KeyCode.S;
+import static javafx.scene.input.KeyCode.T;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -95,93 +120,55 @@ import static jdk.nashorn.internal.objects.NativeJava.type;
 import static jdk.nashorn.internal.runtime.Debug.id;
 import org.controlsfx.control.Notifications;
 import utils.ConnexionBase;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 
 //hou hetha
    
-public class CommentaireController implements Initializable {
-    @FXML
-    private TableView<CommentaireEvenement> cc_com;
+public class ComentsController implements Initializable { 
 
-    @FXML
-    private TableColumn<CommentaireEvenement, String> cc_contenucom;
-
-    @FXML
-    private TableColumn<CommentaireEvenement, Integer> cc_articlecom;
-
-
-  @FXML
-    private Label labelimage;
-
-    private JFXTextArea id_console;
-      @FXML
-    private JFXButton load;
-
-    
-    @FXML
-    private Label count;
-    
-private TextField text_title;
-private PreparedStatement prt=null;
-private FileInputStream A;
-    ObservableList<Articles_especes> oo,oblist=FXCollections.observableArrayList();
-   
-      FilteredList<Articles_especes> filteredData = new FilteredList<>(oblist, b -> true);
     @FXML
     private AnchorPane listview;
-    private TextField text_obj;
-
-    private TextField text_msg;
- private CommentaireEvenement ev=null;
+    @FXML
+    private AnchorPane GUI;
+    @FXML
+    private StackPane DetailsEvenementStackPane;
+    @FXML
+    private ScrollPane scrollPaneCommentaire;
+    @FXML
+    private VBox content;
+    @FXML
+    private TextArea commentaire_text_fx;
+    
+    private ServiceCommentaireEvenement sc = new ServiceCommentaireEvenement();
+    @FXML
+    private TextField contenu_com;
     @FXML
     private JFXButton AddArticle;
-    
     @FXML
-    private ComboBox<String> check;
-
-String imagepath;
+    private JFXButton load;
     @FXML
     private ImageView imageview;
-      String img="";
-Collection<Commentaires> com=null;
-String Titre = "";
-    List<String> type;
-        @FXML
+    @FXML
+    private Label count;
+    @FXML
+    private Label fileselected;
+    @FXML
     private Label labeltitre;
-
-	  
-   private Connection cnx;
-    private Statement st;
-    private PreparedStatement pre;
-
     @FXML
     private Label labelcontenu;
     @FXML
-    private Label fileselected;
-
-
-    /*@FXML
-    void smsload(ActionEvent event) throws IOException {
-
-      Parent send = FXMLLoader.load(getClass().getResource("SMSSender.fxml"));
-      Scene article_scene=new Scene(send);
-      Stage app_stage =(Stage)((Node)event.getSource()).getScene().getWindow();
-      app_stage.hide();
-      app_stage.setScene(article_scene);
-      app_stage.show();
-      
-    } */
-    
-  /*  void sendsms(ActionEvent event) {
-
- 
-    SMS Tut=new SMS();
-    Tut.SendSMS("alma_09","almoucha123",text_msg.getText(),text_obj.getText(),"https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
-    .showMessageDialog(null, "sms sent");
-    }*/
-  
-
+    private Label labelimage;
     @FXML
     private Label labeltype;
+   @FXML
+    private ComboBox<String> check;
+    @FXML
+    private TableView<CommentaireEvenement> cc_com;
+    @FXML
+    private TableColumn<CommentaireEvenement, String> cc_contenucom;
+    @FXML
+    private TableColumn<Articles_especes, Integer> cc_articlecom;
     @FXML
     private Label Lhello;
     @FXML
@@ -208,32 +195,90 @@ String Titre = "";
     private Button FormationsBtn;
     @FXML
     private JFXButton smssend;
+    private CommentaireEvenement ev=null;
     @FXML
     private JFXButton print1;
-       @FXML
-    private JFXTextField contenu_com;
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
+    public void initialize(URL location, ResourceBundle resources) {
+       
+    }
+    
+    
+  
+   
+  @FXML
+    public void ajouterCommentaireEvenement() throws SQLException {
+        //String contenueCommentaireEvenement = commentaire_text_fx.getText();
+   int id = 0;
+        BoxBlur blur = new BoxBlur(2, 2, 2);
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+        JFXButton button = new JFXButton("OKAY");
+        button.getStyleClass().add("dialog-button");
+        JFXDialog dialog = new JFXDialog(DetailsEvenementStackPane, dialogLayout, JFXDialog.DialogTransition.TOP);
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
+            dialog.close();
+        });
+        if ((commentaire_text_fx.getText()).isEmpty()) {
+            dialogLayout.setHeading(new Label("Champ commentaire est vide"));
+            dialogLayout.setBody(new Label("vous devez ecrir un commentaire"));
+            dialogLayout.setActions(button);
+            dialog.show();
+            dialog.setOnDialogClosed((JFXDialogEvent event1) -> {
+                GUI.setEffect(null);
+            });
+            GUI.setEffect(blur);
+            return;
+        }
+       
+        sc.ajouterCommentaireEvenement(commentaire_text_fx.getText(),id);
+        setDataCommentaire();
+   
+
+        commentaire_text_fx.clear();
+    }
+
+   public void setDataCommentaire() {
+
+        content.getChildren().clear();
+        commentaires();
 
     }
-          
-/*     
-try{
+    ObservableList<CommentaireEvenement> dataComment = FXCollections.observableArrayList();
 
-String sql="Select count(Titre) from Articles_especes";
- PreparedStatement pst = cnx.prepareStatement(sql);
- ResultSet rs = pst.executeQuery(sql);
-if(rs.next()){
-    String sum=rs.getString("count(Titre)");
-    txtsum.setText(sum);
-     pst.executeUpdate();
-}}catch(SQLException e){JOptionPane.showMessageDialog(null, "nbre of articles");
+    public void commentaires() {
+       dataComment.clear();
+        try {
+            dataComment.addAll(sc.afficherCommentaire());
 
-         */
+            HBox hbox = new HBox();
+            content.getChildren().add(hbox);
+            int index = 0;
 
-    
- @FXML
+            JFXDepthManager.setDepth(hbox, 0);
+
+            for (CommentaireEvenement commentaire : dataComment) {
+
+                if (index % 1 == 0) {
+                    hbox = new HBox();
+                    content.getChildren().add(hbox);
+                }
+
+                Label c = new Label();
+                c.setText(commentaire.getUser()+ " " + commentaire.getMessage());
+
+                HBox hb = new HBox();
+                hb.getChildren().addAll(c);
+                hb.setMargin(c, new Insets(1, 1, 1, 1));
+
+                hbox.getChildren().add(hb);
+                index++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
    public void SelectItemes(javafx.scene.input.MouseEvent event) {
          
         Connection cnx = ConnexionBase.getInstance().getCnx();//connexion mteek chesmha 
@@ -272,9 +317,7 @@ if(rs.next()){
         }
    }
   
-     
-      
-
+    
       @FXML
       void Loadcom(ActionEvent event) {//hethi l affich
         ServiceCommentaireEvenement sp = new  ServiceCommentaireEvenement ();
@@ -315,7 +358,39 @@ void AddCom(ActionEvent event) throws  SQLException, IOException{
             alert.setContentText("Added  Don!");
             alert.showAndWait();//bb wini el fxml mte3 el add
        }
-        @FXML
+        
+        
+  /*  @FXML
+    public void ajouterCommentaireEvenement() throws SQLException {
+        //String contenueCommentaireEvenement = commentaire_text_fx.getText();
+        BoxBlur blur = new BoxBlur(2, 2, 2);
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+        JFXButton button = new JFXButton("OKAY");
+        button.getStyleClass().add("dialog-button");
+        JFXDialog dialog = new JFXDialog(DetailsEvenementStackPane, dialogLayout, JFXDialog.DialogTransition.TOP);
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
+            dialog.close();
+        });
+        if ((commentaire_text_fx.getText()).isEmpty()) {
+            dialogLayout.setHeading(new Label("Champ commentaire est vide"));
+            dialogLayout.setBody(new Label("vous devez ecrir un commentaire"));
+            dialogLayout.setActions(button);
+            dialog.show();
+            dialog.setOnDialogClosed((JFXDialogEvent event1) -> {
+                GUI.setEffect(null);
+            });
+            GUI.setEffect(blur);
+            return;
+        }
+       
+        sc.ajouterCommentaireEvenement(commentaire_text_fx.getText(),id);
+        setDataCommentaire();
+   
+
+        commentaire_text_fx.clear();
+    }
+*/
+  @FXML
 public void changeContenuCellEvent(CellEditEvent edittedCell)
     {
        CommentaireEvenement art =  (CommentaireEvenement) cc_com.getSelectionModel().getSelectedItem();
@@ -354,63 +429,6 @@ public void changeContenuCellEvent(CellEditEvent edittedCell)
       app_stage.show();
     }
 
-  /*  @FXML
-    public void ajouterCommentaireEvenement() throws SQLException {
-        //String contenueCommentaireEvenement = commentaire_text_fx.getText();
-        BoxBlur blur = new BoxBlur(2, 2, 2);
-        JFXDialogLayout dialogLayout = new JFXDialogLayout();
-        JFXButton button = new JFXButton("OKAY");
-        button.getStyleClass().add("dialog-button");
-        JFXDialog dialog = new JFXDialog(DetailsEvenementStackPane, dialogLayout, JFXDialog.DialogTransition.TOP);
-        button.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent mouseEvent) -> {
-            dialog.close();
-        });
-        if ((commentaire_text_fx.getText()).isEmpty()) {
-            dialogLayout.setHeading(new Label("Champ commentaire est vide"));
-            dialogLayout.setBody(new Label("vous devez ecrir un commentaire"));
-            dialogLayout.setActions(button);
-            dialog.show();
-            dialog.setOnDialogClosed((JFXDialogEvent event1) -> {
-                GUI.setEffect(null);
-            });
-            GUI.setEffect(blur);
-            return;
-        }
-       
-        sc.ajouterCommentaireEvenement(commentaire_text_fx.getText(),id);
-        setDataCommentaire();
-   
 
-        commentaire_text_fx.clear();
-    }
-*/
-
-    void DeleteArticle(ActionEvent Event) throws SQLException{
-      try { 
-Articles_especes.DeleteArticleBytitre(String.valueOf(text_title.getText()));
-  id_console.setText("Article deleted suceffuly..");
- }catch(SQLException e){
-     System.out.println("error occured while deleting article"+e);
-     throw e;
- }}
-
-    @FXML
-    private void chatAction(javafx.scene.input.MouseEvent event) throws IOException {
-        
-        
-            Parent send = FXMLLoader.load(getClass().getResource("Comments.fxml"));
-      Scene article_scene=new Scene(send);
-      Stage app_stage =(Stage)((Node)event.getSource()).getScene().getWindow();
-      app_stage.hide();
-      app_stage.setScene(article_scene);
-      app_stage.show();
-    
-    }
-
-    
-    
   
 }
- 
- 
- 
