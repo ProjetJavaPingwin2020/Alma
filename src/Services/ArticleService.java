@@ -6,22 +6,20 @@
 package Services;
 
 import Entity.Articles_especes;
-import Entity.Commentaires;
 import Entity.FosUser;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.swing.JOptionPane;
@@ -55,10 +53,11 @@ public class ArticleService {
             ResultSet rs = pst.executeQuery(req);
             while (rs.next()) {
                 Articles_especes A = new Articles_especes();
+                FosUser b=new FosUser();
                 A.setType(rs.getString("Type"));
                 A.setTitre(rs.getString("titre"));
                 A.setContenu(rs.getString("Contenu"));
-               // A.setUser(rs.getString("user"));
+               A.setUser(rs.getString("user"));
                A.setDatepub(rs.getDate("datepub"));
                 A.setImage(rs.getString("image"));
             
@@ -98,7 +97,7 @@ public class ArticleService {
       public String getStockType(int a) throws SQLException {
           String an="" ;
         PreparedStatement pre = cnx.prepareStatement("SELECT Titre FROM Articles_especes WHERE id = ?  ;");
-//hne nhot chnouwa ?? el loula edhyka eli bech tafichih men table lokhra yaan
+
         pre.setInt(1, a);
         ResultSet rs = pre.executeQuery();
         while (rs.next()) {
@@ -110,6 +109,7 @@ public class ArticleService {
         }
         return an;
      }
+   
   /* 
    public int count(){
     try {
@@ -147,13 +147,13 @@ public class ArticleService {
             String requete
                     = "INSERT INTO `articles_especes` (`Type`,`Titre`,`Contenu`,`image`) VALUES (?,?,?,?)";
         PreparedStatement bt = cnx.prepareStatement(requete);
-         bt.setString(1, A.getType());
+        bt.setString(1, A.getType());
         bt.setString(2, A.getTitre());
         bt.setString(3, A.getContenu());
         bt.setString(4, A.getImage());
         
-            bt.executeUpdate();
-            System.out.println("article ajoutée");
+        bt.executeUpdate();
+        System.out.println("article ajoutée");
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
 
@@ -185,6 +185,7 @@ public void updateArticle (Articles_especes A, int id) throws IOException {
 
 
     }
+
 
     /*public ArrayList<Commentaires> select() {
         // TODO Auto-generated method stub

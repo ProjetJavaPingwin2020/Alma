@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Entity;
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
+//import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -45,6 +45,7 @@ public class Articles_especes  {
  
 
     private Date datepub;
+ 
 
     public String getUser() {
         return User;
@@ -87,6 +88,7 @@ private int Userid;
     public Articles_especes(String Type, String TitreE, String Contenu, String img, String commentaire) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 
     public String getType() {
         return Type;

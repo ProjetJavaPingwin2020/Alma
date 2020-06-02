@@ -8,11 +8,13 @@ package projetpidev;
 import org.apache.commons.io.FileUtils;
 import Entity.Articles_especes;
 import Entity.Commentaires;
+import Entity.FosUser;
 import Services.ArticleService;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
@@ -281,10 +283,10 @@ ResultSet rs;
             Logger.getLogger(FXMLArticles_especesController.class.getName()).log(Level.SEVERE, null, ex);
         }*/
     }
+    
     @FXML
      void print(ActionEvent event) throws FileNotFoundException, DocumentException {
-
-        
+  
            String file_name="C:\\wamp64\\www\\pdfd\\Articles.pdf";  
      Document document=new Document();
       PdfWriter.getInstance(document,new FileOutputStream(file_name));
@@ -294,7 +296,7 @@ ResultSet rs;
      
        document.open();
     
-       //document.add(Image.getInstance("C:\\wamp64\\www\\hunt.JPG"));g
+      // document.add(Image.getInstance("C:\\wamp64\\www\\hunt.JPG"));
   
       
         Connection  cnx = ConnexionBase.getInstance().getCnx();
@@ -305,6 +307,7 @@ ResultSet rs;
      Paragraph para=new  Paragraph(rs.getString("Titre")+" "+rs.getString("Contenu")+rs.getString("Type"));
      Paragraph p = new Paragraph();
             p.add("Hunkingdom");
+            
             p.setAlignment(Element.ALIGN_CENTER);
             document.add(p);
 //            document.add(Image.getInstance("C:\\wamp64\\www\\hunt.JPG"));
@@ -323,6 +326,8 @@ document.add(para);
        System.out.println(e);
 }
 }
+     
+
     @FXML
    public  void Calculate(ActionEvent event) throws SQLException {
     
@@ -368,7 +373,7 @@ document.add(para);
       
              cc_image.setCellValueFactory(new PropertyValueFactory<>("photo"));
              DATE_cc.setCellValueFactory(new PropertyValueFactory<>("datepub"));
-             //user.setCellValueFactory(new PropertyValueFactory<>("user"));
+             user.setCellValueFactory(new PropertyValueFactory<>("user"));
              cc_titre.setCellFactory(TextFieldTableCell.forTableColumn());
              cc_contenu.setCellFactory(TextFieldTableCell.forTableColumn());
          

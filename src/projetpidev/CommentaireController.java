@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package projetpidev;
-
+import com.itextpdf.text.Image;
 import org.apache.commons.io.FileUtils;
 import Entity.Articles_especes;
 import Entity.CommentaireEvenement;
@@ -12,6 +12,13 @@ import Entity.Commentaires;
 import Services.ArticleService;
 import Services.CommentaireService;
 import Services.ServiceCommentaireEvenement;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDialog;
@@ -19,6 +26,12 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
+import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.controls.events.JFXDialogEvent;
 
 import com.teknikindustries.bulksms.SMS;
@@ -28,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -50,6 +64,10 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -66,9 +84,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -76,12 +97,17 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.image.Image;
+
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -100,13 +126,13 @@ import utils.ConnexionBase;
    
 public class CommentaireController implements Initializable {
     @FXML
-    private TableView<CommentaireEvenement> cc_com;
+    private TableView<Commentaires> cc_com;
 
     @FXML
-    private TableColumn<CommentaireEvenement, String> cc_contenucom;
+    private TableColumn<Commentaires, String> cc_contenucom;
 
     @FXML
-    private TableColumn<CommentaireEvenement, Integer> cc_articlecom;
+    private TableColumn<Commentaires, Integer> cc_articlecom;
 
 
   @FXML
@@ -131,7 +157,7 @@ private FileInputStream A;
     private TextField text_obj;
 
     private TextField text_msg;
- private CommentaireEvenement ev=null;
+ private Commentaires ev=null;
     @FXML
     private JFXButton AddArticle;
     
@@ -147,7 +173,7 @@ String Titre = "";
     List<String> type;
         @FXML
     private Label labeltitre;
-
+//ala chnouwa tlawej 
 	  
    private Connection cnx;
     private Statement st;
@@ -157,30 +183,9 @@ String Titre = "";
     private Label labelcontenu;
     @FXML
     private Label fileselected;
-
-
-    /*@FXML
-    void smsload(ActionEvent event) throws IOException {
-
-      Parent send = FXMLLoader.load(getClass().getResource("SMSSender.fxml"));
-      Scene article_scene=new Scene(send);
-      Stage app_stage =(Stage)((Node)event.getSource()).getScene().getWindow();
-      app_stage.hide();
-      app_stage.setScene(article_scene);
-      app_stage.show();
-      
-    } */
-    
-  /*  void sendsms(ActionEvent event) {
-
- 
-    SMS Tut=new SMS();
-    Tut.SendSMS("alma_09","almoucha123",text_msg.getText(),text_obj.getText(),"https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
-    .showMessageDialog(null, "sms sent");
-    }*/
-  
-
     @FXML
+    private JFXButton convertirpdf;
+@FXML
     private Label labeltype;
     @FXML
     private Label Lhello;
@@ -212,11 +217,119 @@ String Titre = "";
     private JFXButton print1;
        @FXML
     private JFXTextField contenu_com;
-    @Override
+    @FXML
+    private Label lb;
+    @FXML
+    private JFXButton modifier;
+    @FXML
+    private JFXButton sup;
+    @FXML
+    private Label labc;
+    @FXML
+    private Label labt;
+        ObservableList<Commentaires> dataComment = FXCollections.observableArrayList();
+        
+
+    /*@FXML
+    void smsload(ActionEvent event) throws IOException {
+
+      Parent send = FXMLLoader.load(getClass().getResource("SMSSender.fxml"));
+      Scene article_scene=new Scene(send);
+      Stage app_stage =(Stage)((Node)event.getSource()).getScene().getWindow();
+      app_stage.hide();
+      app_stage.setScene(article_scene);
+      app_stage.show();
+      
+    } */
+    
+  /*  void sendsms(ActionEvent event) {
+
+ 
+    SMS Tut=new SMS();
+    Tut.SendSMS("alma_09","almoucha123",text_msg.getText(),text_obj.getText(),"https://bulksms.vsms.net/eapi/submission/send_sms/2/2.0");
+    .showMessageDialog(null, "sms sent");
+    }*/
+  
+@FXML
+    private void convertirEnPdf(ActionEvent event) throws FileNotFoundException, DocumentException {
+    String file="C:\\wamp64\\www\\pdfd\\Articles.pdf";
+    Document document =new Document();
+  Notifications notificationBuilder = Notifications.create()
+    .title("Download completed")
+    .text("saved In C:\\wamp64\\www\\pdfd\\Articles.pdf ")
+    .hideAfter(Duration.seconds(4))
+    .position(Pos.BOTTOM_CENTER);
+    notificationBuilder.showInformation();
+     try{
+           Font f = new Font(FontFactory.getFont(FontFactory.TIMES_BOLD, 24, Font.UNDERLINE));
+           f.setColor(0, 153, 255);
+           Font f2 = new Font(FontFactory.getFont(FontFactory.TIMES_BOLD, 20, Font.BOLD));
+           f2.setColor(0, 0, 0);
+           PdfWriter.getInstance(document, new FileOutputStream(new File(file)));
+           document.open();
+           Paragraph p =new Paragraph("LISTE  DES  Articles  " ,f);
+           p.setAlignment(Element.ALIGN_CENTER);
+          document.add(Image.getInstance("C:\\wamp64\\www\\pdfd\\ping.PNG"));
+           Paragraph pm =new Paragraph();
+           pm.add("   \n  ");
+           document.add(p);
+           document.add(pm);
+           document.add(pm);
+           Paragraph posss= new Paragraph("__________________________________________________");
+           document.add(posss);
+           Paragraph pos= new Paragraph("Titre"+"      "+"Contenu"+"      "+" Date"+"      "+"Type",f2);
+           document.add(pos);
+           document.add(posss);
+        Connection  cnx = ConnexionBase.getInstance().getCnx();
+           String req ="select d.*,s.message from articles_especes d INNER JOIN commentaire s on s.article = d.id  ";
+           Statement pst = cnx.createStatement();
+           ResultSet rs = pst.executeQuery(req);
+      while (rs.next()) {
+           Paragraph p1= new Paragraph( "   ");
+           Paragraph po= new Paragraph(rs.getString("Titre")+"                      "+rs.getString("contenu")+"                     "+rs.getString("datepub")+"               "+rs.getString("type"));
+           document.add(p1);
+           document.add(po);
+            }
+         document.close();
+         System.out.println("Done");
+     }catch(Exception e){
+         e.printStackTrace();
+     }
+    }
+    
+ 
+        @Override
+    public void initialize(URL url, ResourceBundle rb) {
+         
+        Connection  cn2= ConnexionBase.getInstance().getCnx();
+        ObservableList<String> availableChoices = FXCollections.observableArrayList("Selectionner Article");
+          Articles_especes s =new   Articles_especes();
+      ArticleService  a=new ArticleService();
+      
+        String req = "SELECT * FROM articles_especes";
+        try {
+            Statement pst = cn2.createStatement();
+            ResultSet rs = pst.executeQuery(req);
+            while (rs.next()) {
+                s.setId(rs.getInt("id"));
+                s.setTitre(rs.getString("Titre"));
+                availableChoices.add(s.getTitre());
+              check .setItems(availableChoices);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FXMLArticles_especesController.class.getName()).log(Level.SEVERE, null, ex);
+        }                   
+    }
+ 
+
+   
+            
+            
+    /*@Override
     public void initialize(URL url, ResourceBundle rb) {
         
 
-    }
+    }*/
           
 /*     
 try{
@@ -232,27 +345,27 @@ if(rs.next()){
 
          */
 
-    
+   
  @FXML
    public void SelectItemes(javafx.scene.input.MouseEvent event) {
          
         Connection cnx = ConnexionBase.getInstance().getCnx();//connexion mteek chesmha 
-        ObservableList<CommentaireEvenement> oblist;
-        oblist = (ObservableList<CommentaireEvenement>) cc_com.getSelectionModel().getSelectedItems();
-        ev = (CommentaireEvenement)cc_com.getSelectionModel().getSelectedItem();
+        ObservableList<Commentaires> oblist;
+        oblist = (ObservableList<Commentaires>) cc_com.getSelectionModel().getSelectedItems();
+        ev = cc_com.getSelectionModel().getSelectedItem();
         ArticleService stocks = new ArticleService();//nn hedhy 
-        Articles_especes A=new Articles_especes();//shymou hehi article mouch comm 
+        Articles_especes A=new Articles_especes();//
         if (oblist != null) {
-           contenu_com.setText(oblist.get(0).getMessage());
+          contenu_com.setText(oblist.get(0).getMessage());//prob lehne
          
             try {
                  check.setValue(stocks.getStockType(ev.getArticle()));
             } catch (SQLException ex) {
                    Logger.getLogger(CommentaireController.class.getName()).log(Level.SEVERE, null, ex);
                 }                        
-            int max = oblist.get(0).getId();
 //
         }
+         
         ObservableList<String> availableChoices = FXCollections.observableArrayList("Selectionner Article");
         Articles_especes s = new Articles_especes();
   
@@ -272,20 +385,42 @@ if(rs.next()){
         }
    }
   
+   
+    private void supp(ActionEvent event) {
+    
+
+                ObservableList<Commentaires> oblist;
+                oblist = cc_com.getSelectionModel().getSelectedItems();
+                int max = oblist.get(0).getId();
+                CommentaireService act = new   CommentaireService();
+                try {
+            act.supprimer(max);
+            Alert alert =new Alert(AlertType.INFORMATION);
+            alert.setTitle("delete  Commentaire!");
+            alert.setHeaderText("information!");
+            alert.setContentText("deleted Commentaire !");
+            alert.showAndWait();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                
+        }
+    }
      
       
 
       @FXML
       void Loadcom(ActionEvent event) {//hethi l affich
-        ServiceCommentaireEvenement sp = new  ServiceCommentaireEvenement ();
+        CommentaireService sp = new  CommentaireService();
        List coms=sp.CommentaireLoad();
        ObservableList et=FXCollections.observableArrayList(coms);
       
           cc_com.setItems(et);
           cc_com.setEditable(true);
           cc_contenucom.setCellValueFactory(new PropertyValueFactory<>("message"));
-          cc_articlecom.setCellValueFactory(new PropertyValueFactory<>("article"));
-         
+          cc_articlecom.setCellValueFactory(new PropertyValueFactory<>("date_pub"));
+             ;
+           
+             // cc_articlecom.setCellFactory(TextFieldTableCell.forTableColumn());
           // cc_datepubcom.setCellValueFactory(new PropertyValueFactory<>("datepub"));
     }  
       
@@ -293,21 +428,16 @@ if(rs.next()){
 @FXML
    
 void AddCom(ActionEvent event) throws  SQLException, IOException{
-  /*String Contenu=contenu_com.getText();
-  int Article= Integer.parseInt(check.getValue());
-  CommentaireService sp = new  CommentaireService() ;
-  Commentaires e = new Commentaires(Contenu,Article);
-        sp.ajouuterCommentaire(e);
-        JOptionPane.showMessageDialog(null, " commentaire ajoute avec succes");*/
+
   String a = contenu_com.getText();
       
-       ServiceCommentaireEvenement sp = new   ServiceCommentaireEvenement();
+     //  ServiceCommentaireEvenement sp = new   ServiceCommentaireEvenement();
         ArticleService stocks = new  ArticleService();
        Articles_especes s=new Articles_especes(); 
    
         s=stocks.getStock((String) check.getValue());
-       ServiceCommentaireEvenement ac = new ServiceCommentaireEvenement();
-        CommentaireEvenement dd = new CommentaireEvenement (s.getId(),a);
+       CommentaireService ac = new  CommentaireService();
+        Commentaires dd = new Commentaires(s.getId(),a);
         ac.ajouuterCommentaire(dd); //mochekla fil add eli fil service el code hedha yemchy c'est deja ya9ra fil alert 
         Alert alert =new Alert(AlertType.INFORMATION);
             alert.setTitle("Add Don!");
@@ -315,14 +445,57 @@ void AddCom(ActionEvent event) throws  SQLException, IOException{
             alert.setContentText("Added  Don!");
             alert.showAndWait();//bb wini el fxml mte3 el add
        }
-        @FXML
-public void changeContenuCellEvent(CellEditEvent edittedCell)
+        
+/*public void changeContenuCellEvent(CellEditEvent edittedCell)
     {
-       CommentaireEvenement art =  (CommentaireEvenement) cc_com.getSelectionModel().getSelectedItem();
-       art.setMeessage(edittedCell.getNewValue().toString());
+       Commentaires art =  (Commentaires) cc_com.getSelectionModel().getSelectedItem();
+       art.setContenu(edittedCell.getNewValue().toString());
+    }*/
+  /*public  void UpdateCommentaire(ActionEvent event) throws SQLException {
+        
+      Commentaires.updateArticle(contenu_com.getText());
+      JOptionPane.showMessageDialog(null, "Update avec succes");
+} */
+
+   public void changeContenuCellEvent(CellEditEvent edittedCell)
+    {
+        Commentaires art =  cc_com.getSelectionModel().getSelectedItem();
+       art.setMessage(edittedCell.getNewValue().toString());
     }
-
-
+   
+    @FXML
+    private void modifierCom(ActionEvent event)throws SQLException {
+        labc.setText("");
+        if(contenu_com.getText().isEmpty()){//hethy zeda ?
+    labc.setText("aucun contenu n'est ajouté  ");
+        }else {
+      
+       Commentaires s = new   Commentaires ();
+        s.setMessage(contenu_com.getText());//heki contenu_com wela lo5ra te table ? edhyka eli warythelik
+       ArticleService stocks = new  ArticleService ();//hethi article 
+              Articles_especes b=new Articles_especes();
+               b=stocks.getStock(check.getValue());  //edhyla el combo
+                System.out.println("cle etranger"+b.getId());
+        ObservableList<Commentaires> ob;
+        ob = cc_com.getSelectionModel().getSelectedItems();//cc_com edhyka l table? ey
+       
+        CommentaireService act = new CommentaireService();
+        Commentaires a=new   Commentaires(stocks.getStock(check.getValue()).getId(),cc_contenucom.getText());//hethi l table l 2?
+        try{
+        act.modifier(a, ev.getId());//mch 9a3ed ya9r a fibrl aidbh d9iça
+        
+        Alert alert =new Alert(AlertType.INFORMATION);//hethika l combo ? lee
+        alert.setTitle("Update Commentaire!");
+        alert.setHeaderText("information!");
+        alert.setContentText("updated Commenatire!");
+        alert.showAndWait();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+}
+    }
+   
+    
     @FXML
     private void logout(javafx.scene.input.MouseEvent event) {
     }
@@ -406,11 +579,22 @@ Articles_especes.DeleteArticleBytitre(String.valueOf(text_title.getText()));
       app_stage.show();
     
     }
+    @FXML
+    public void DeleteCommentaire(ActionEvent Event) throws SQLException{
+      try { 
+Commentaires.DeleteArticleBytitre(String.valueOf(contenu_com.getText()));
+     JOptionPane.showMessageDialog(null, "Delete avec succes");
+ }catch(SQLException e){
+     System.out.println("error occured while deleting commentaire"+e);
+     throw e;
+ }}
 
-    
-    
-  
+    @FXML
+    private void SelectItemes(ContextMenuEvent event) {
+    }
+
+
+
+
+
 }
- 
- 
- 

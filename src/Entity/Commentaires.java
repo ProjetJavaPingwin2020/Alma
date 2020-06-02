@@ -5,13 +5,17 @@
  */
 package Entity;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javafx.collections.ObservableList;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import utils.ConnexionBase;
 
 /**
  *
@@ -20,12 +24,32 @@ import javax.persistence.Table;
 
 
 public class Commentaires {
+
+    public static void DeleteArticleBytitre(String message) throws SQLException{
+          
+       Connection cnx = ConnexionBase.getInstance().getCnx();
+        String sql="DELETE FROM `commentaire` WHERE message ='"+message+"'";
+          PreparedStatement prt =cnx.prepareStatement(sql);
+       try{
+prt.executeUpdate();          
+       /*oblist=cc_article.getItems();
+        oo=cc_article.getSelectionModel().getSelectedItems();
+        oo.forEach(oblist::remove);*/
+ }
+       catch (SQLException e){
+     System.out.println("errror occured");
+     e.printStackTrace();
+     throw e;
+     
+ }}
+
+    
    
 @Id
 private int id;
-private int user;
+private String user;
 private Date date_pub;
-private String Contenu;
+private String message;
 private int article;
    private String sto;
    Articles_especes s;
@@ -44,7 +68,25 @@ private int article;
     public void setSto(String sto) {
         this.sto = sto;
     }
-
+public  static void updatecom(String contenu,String Article) throws SQLException {
+               
+       Connection cnx = ConnexionBase.getInstance().getCnx();
+        String sql="Update commentaire set message= '"+contenu+"' WHERE article ='"+Article+"' " ;
+        
+          PreparedStatement prt =cnx.prepareStatement(sql);
+       try{
+prt.executeUpdate();          
+      /* oblist=cc_com.getItems();
+        oo=cc_article.getSelectionModel().getSelectedItems();
+        oo.forEach(oblist::remove);*/ // bekrii fema whda bedeltt fihaa kima hekaa fct ema mehomchh hedhomm ..
+ }
+       catch (SQLException e){
+     System.out.println("errror occured when updating");
+     e.printStackTrace();
+     throw e;
+     
+ 
+    }}
   
 
     public Commentaires() {
@@ -53,21 +95,26 @@ private int article;
 
   
 
-    public Commentaires(int id, int user,int article, Date date_pub, String Contenu) {
+    public Commentaires(int id, String user,int article, Date date_pub, String Contenu) {
         this.id = id;
         this.user = user;
         this.date_pub = date_pub;
-        this.Contenu = Contenu;
+        this.message = message;
         this.article=article;
     }
 
-    public Commentaires(int article,String Contenu) {
-       this.Contenu = Contenu;
+    public Commentaires(int article,String message) {
+       this.message= message;
         this.article=article;
        
     }
+        public Commentaires(String message) {
+       this.message= message;
+       
+       
+    }
       public Commentaires(String Contenu, Articles_especes s) {
-       this.Contenu = Contenu;
+       this.message = message;
         this.s=s;
     }
 
@@ -90,11 +137,11 @@ private int article;
         this.id = id;
     }
 
-    public int getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(int user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -109,18 +156,18 @@ private int article;
         this.date_pub = date_pub;
     }
 
-    public String getContenu() {
-        return Contenu;
+    public String getMessage() {
+        return message;
     }
 
-    public void setContenu(String Contenu) {
-        this.Contenu = Contenu;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public void setDate_pub() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 
+  
+ 
 
     
     

@@ -137,64 +137,15 @@ public class ComentsController implements Initializable {
     private ScrollPane scrollPaneCommentaire;
     @FXML
     private VBox content;
-    @FXML
-    private TextArea commentaire_text_fx;
     
     private ServiceCommentaireEvenement sc = new ServiceCommentaireEvenement();
-    @FXML
     private TextField contenu_com;
-    @FXML
-    private JFXButton AddArticle;
-    @FXML
-    private JFXButton load;
-    @FXML
-    private ImageView imageview;
-    @FXML
-    private Label count;
-    @FXML
-    private Label fileselected;
-    @FXML
-    private Label labeltitre;
-    @FXML
-    private Label labelcontenu;
-    @FXML
-    private Label labelimage;
-    @FXML
-    private Label labeltype;
-   @FXML
     private ComboBox<String> check;
-    @FXML
     private TableView<CommentaireEvenement> cc_com;
-    @FXML
     private TableColumn<CommentaireEvenement, String> cc_contenucom;
-    @FXML
     private TableColumn<Articles_especes, Integer> cc_articlecom;
     @FXML
-    private Label Lhello;
-    @FXML
-    private Pane pane11;
-    @FXML
-    private Pane pane2;
-    @FXML
-    private Pane pane3;
-    @FXML
-    private Pane pane4;
-    @FXML
-    private ImageView logout;
-    @FXML
-    private ImageView panier;
-    @FXML
-    private Button EspecesBtn;
-    @FXML
-    private Button EvenementsBtn;
-    @FXML
-    private Button InformationsBtn;
-    @FXML
     private Button BoutiqueBtn;
-    @FXML
-    private Button FormationsBtn;
-    @FXML
-    private JFXButton smssend;
     private CommentaireEvenement ev=null;
     @FXML
     private JFXButton print1;
@@ -205,7 +156,7 @@ public class ComentsController implements Initializable {
     
     
   
-   
+   /*
   @FXML
     public void ajouterCommentaireEvenement() throws SQLException {
         //String contenueCommentaireEvenement = commentaire_text_fx.getText();
@@ -235,7 +186,7 @@ public class ComentsController implements Initializable {
    
 
         commentaire_text_fx.clear();
-    }
+    }*/
 
    public void setDataCommentaire() {
 
@@ -243,8 +194,9 @@ public class ComentsController implements Initializable {
         commentaires();
 
     }
-    ObservableList<CommentaireEvenement> dataComment = FXCollections.observableArrayList();
+    ObservableList<Commentaires> dataComment = FXCollections.observableArrayList();
 
+    @FXML
     public void commentaires() {
        dataComment.clear();
         try {
@@ -256,7 +208,7 @@ public class ComentsController implements Initializable {
 
             JFXDepthManager.setDepth(hbox, 0);
 
-            for (CommentaireEvenement commentaire : dataComment) {
+            for (Commentaires commentaire : dataComment) {
 
                 if (index % 1 == 0) {
                     hbox = new HBox();
@@ -278,7 +230,6 @@ public class ComentsController implements Initializable {
         }
 
     }
-    @FXML
    public void SelectItemes(javafx.scene.input.MouseEvent event) {
          
         Connection cnx = ConnexionBase.getInstance().getCnx();//connexion mteek chesmha 
@@ -318,7 +269,6 @@ public class ComentsController implements Initializable {
    }
   
     
-      @FXML
       void Loadcom(ActionEvent event) {//hethi l affich
         ServiceCommentaireEvenement sp = new  ServiceCommentaireEvenement ();
        List coms=sp.CommentaireLoad();
@@ -327,14 +277,12 @@ public class ComentsController implements Initializable {
           cc_com.setItems(et);
           cc_com.setEditable(true);
           cc_contenucom.setCellValueFactory(new PropertyValueFactory<>("message"));
-          cc_articlecom.setCellValueFactory(new PropertyValueFactory<>("article"));
+          cc_articlecom.setCellValueFactory(new PropertyValueFactory<>("Titre"));
          
           // cc_datepubcom.setCellValueFactory(new PropertyValueFactory<>("datepub"));
     }  
       
 
-@FXML
-   
 void AddCom(ActionEvent event) throws  SQLException, IOException{
   /*String Contenu=contenu_com.getText();
   int Article= Integer.parseInt(check.getValue());
@@ -351,7 +299,7 @@ void AddCom(ActionEvent event) throws  SQLException, IOException{
         s=stocks.getStock((String) check.getValue());
        ServiceCommentaireEvenement ac = new ServiceCommentaireEvenement();
         CommentaireEvenement dd = new CommentaireEvenement (s.getId(),a);
-        ac.ajouuterCommentaire(dd); //mochekla fil add eli fil service el code hedha yemchy c'est deja ya9ra fil alert 
+       // ac.ajouuterCommentaire(dd); //mochekla fil add eli fil service el code hedha yemchy c'est deja ya9ra fil alert 
         Alert alert =new Alert(AlertType.INFORMATION);
             alert.setTitle("Add Don!");
             alert.setHeaderText("information!");
@@ -390,7 +338,6 @@ void AddCom(ActionEvent event) throws  SQLException, IOException{
         commentaire_text_fx.clear();
     }
 */
-  @FXML
 public void changeContenuCellEvent(CellEditEvent edittedCell)
     {
        CommentaireEvenement art =  (CommentaireEvenement) cc_com.getSelectionModel().getSelectedItem();
@@ -398,11 +345,7 @@ public void changeContenuCellEvent(CellEditEvent edittedCell)
     }
 
 
-    @FXML
-    private void logout(javafx.scene.input.MouseEvent event) {
-    }
 
-    @FXML
     private void smsload(ActionEvent event) throws IOException {
         
  
@@ -414,8 +357,7 @@ public void changeContenuCellEvent(CellEditEvent edittedCell)
       app_stage.setScene(article_scene);
       app_stage.show();
     } 
-       @FXML
-    void redirectionFormation(ActionEvent event) {
+       void redirectionFormation(ActionEvent event) {
 
     }
        @FXML
